@@ -44,8 +44,8 @@ pub fn get_settings() -> &'static Settings {
 
 fn load_settings() -> MultihookResult<Settings> {
     let config_dir = dirs::config_dir()
-        .unwrap_or(PathBuf::from(".config"))
-        .join("multihook");
+        .map(|c| c.join("multihook"))
+        .unwrap_or(PathBuf::from(".config"));
     if !Path::new(&config_dir).exists() {
         fs::create_dir(&config_dir)?;
     }
