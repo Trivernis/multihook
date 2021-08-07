@@ -21,6 +21,10 @@ pub struct ServerSettings {
 pub struct EndpointSettings {
     pub path: String,
     pub action: String,
+    #[serde(default)]
+    pub allow_parallel: bool,
+    #[serde(default)]
+    pub run_detached: bool,
 }
 
 impl Default for Settings {

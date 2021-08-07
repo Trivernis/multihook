@@ -10,7 +10,7 @@ use action::HookAction;
 
 use crate::utils::error::MultihookError;
 
-mod action;
+pub mod action;
 pub mod command_template;
 
 pub struct HookServer {

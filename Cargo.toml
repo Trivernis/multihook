@@ -27,7 +27,7 @@ features = ["derive"]
 
 [dependencies.tokio]
 version = "1.9.0"
-features = ["macros", "process"]
+features = ["macros", "process", "sync"]
 
 [features]
 default = ["tokio/rt-multi-thread"]

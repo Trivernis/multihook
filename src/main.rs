@@ -1,6 +1,3 @@
-#[cfg(all(feature = "singlethreaded", feature = "multithreaded"))]
-compile_error!("Can't have singlethreaded and mutithreaded feature enabled at the same time.");
-
 use std::path::{Path, PathBuf};
 
 use utils::logging::init_logger;
@@ -36,7 +33,7 @@ async fn init_and_start() {
 
     for (name, endpoint) in &settings.endpoints {
         log::info!("Adding endpoint '{}' with path '{}'", name, &endpoint.path);
-        server.add_hook(endpoint.path.clone(), endpoint.action.clone().into())
+        server.add_hook(endpoint.path.clone(), endpoint.into())
     }
 
     server.start(&settings.server.address).await

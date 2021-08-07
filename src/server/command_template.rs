@@ -3,6 +3,7 @@ use lazy_static::lazy_static;
 use regex::{Match, Regex};
 use serde_json::Value;
 
+#[derive(Clone)]
 pub struct CommandTemplate {
     src: String,
     matches: Vec<(usize, usize)>,
