@@ -14,7 +14,7 @@ pub struct Settings {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ServerSettings {
-    pub address: String,
+    pub address: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -31,9 +31,7 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             endpoints: HashMap::new(),
-            server: ServerSettings {
-                address: String::from("127.0.0.1:8080"),
-            },
+            server: ServerSettings { address: None },
         }
     }
 }
@@ -52,11 +50,11 @@ fn load_settings() -> MultihookResult<Settings> {
         .unwrap_or(PathBuf::from(".config"));
     if !Path::new(&config_dir).exists() {
         fs::create_dir(&config_dir)?;
+        write_toml_pretty(
+            &config_dir.clone().join("config.toml"),
+            &Settings::default(),
+        )?;
     }
-    write_toml_pretty(
-        &config_dir.clone().join("default-config.toml"),
-        &Settings::default(),
-    )?;
 
     let mut settings = config::Config::default();
     settings

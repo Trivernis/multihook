@@ -28,7 +28,7 @@ multihook
 
 The config allows you to configure actions for each endpoint. The config is most likely
 stored in `~/.config/multihook` and on Windows maybe in the APPDATA directory (?).
-After running the program for the first time there should be a `default-config.toml` file.
+After running the program for the first time the config directory and config file should be created.
 
 ```toml
 [server]

@@ -36,5 +36,10 @@ async fn init_and_start() {
         server.add_hook(endpoint.path.clone(), endpoint.into())
     }
 
-    server.start(&settings.server.address).await
+    let address = settings
+        .server
+        .address
+        .clone()
+        .unwrap_or(String::from("127.0.0.1:8080"));
+    server.start(&address).await
 }
