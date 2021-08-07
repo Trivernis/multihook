@@ -1,5 +1,5 @@
-use crate::command_template::CommandTemplate;
-use crate::error::MultihookResult;
+use crate::server::command_template::CommandTemplate;
+use crate::utils::error::MultihookResult;
 use serde_json::Value;
 use std::fs::read_to_string;
 use std::path::PathBuf;

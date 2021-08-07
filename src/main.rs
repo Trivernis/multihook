@@ -1,17 +1,29 @@
-use crate::logging::init_logger;
-use crate::server::HookServer;
-use crate::settings::get_settings;
+#[cfg(all(feature = "singlethreaded", feature = "multithreaded"))]
+compile_error!("Can't have singlethreaded and mutithreaded feature enabled at the same time.");
+
 use std::path::{Path, PathBuf};
 
-mod action;
-mod command_template;
-mod error;
-mod logging;
-mod server;
-mod settings;
+use utils::logging::init_logger;
+use utils::settings::get_settings;
 
+use crate::server::HookServer;
+
+mod server;
+pub(crate) mod utils;
+
+#[cfg(not(feature = "singlethreaded"))]
 #[tokio::main]
 async fn main() {
+    init_and_start().await
+}
+
+#[cfg(feature = "singlethreaded")]
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    init_and_start().await
+}
+
+async fn init_and_start() {
     init_logger();
     let data_dir = dirs::data_dir()
         .map(|d| d.join("multihook"))
@@ -21,8 +33,9 @@ async fn main() {
     }
     let settings = get_settings();
     let mut server = HookServer::new();
+
     for (name, endpoint) in &settings.endpoints {
-        log::info!("Adding endpoint {} with path {}", name, &endpoint.path);
+        log::info!("Adding endpoint '{}' with path '{}'", name, &endpoint.path);
         server.add_hook(endpoint.path.clone(), endpoint.action.clone().into())
     }
 

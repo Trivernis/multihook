@@ -1,4 +1,4 @@
-use crate::error::MultihookResult;
+use crate::utils::error::MultihookResult;
 use config::File;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};

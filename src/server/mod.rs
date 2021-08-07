@@ -1,11 +1,17 @@
-use crate::action::HookAction;
-use crate::error::MultihookError;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
+
 use warp::http::Response;
 use warp::hyper::body::Bytes;
 use warp::{Filter, Rejection};
+
+use action::HookAction;
+
+use crate::utils::error::MultihookError;
+
+mod action;
+pub mod command_template;
 
 pub struct HookServer {
     endpoints: HashMap<String, HookAction>,
