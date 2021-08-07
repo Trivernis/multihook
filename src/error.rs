@@ -12,8 +12,17 @@ pub enum MultihookError {
     #[error("Failed to parse body as utf8 string {0}")]
     UTF8Error(#[from] FromUtf8Error),
 
-    #[error("Unknown endpoint")]
-    UnknownEndpoint,
+    #[error(transparent)]
+    TomlSerializeError(#[from] toml::ser::Error),
+
+    #[error(transparent)]
+    TomlDeserializeError(#[from] toml::de::Error),
+
+    #[error(transparent)]
+    IoError(#[from] std::io::Error),
+
+    #[error(transparent)]
+    ConfigError(#[from] config::ConfigError),
 }
 
 impl Reject for MultihookError {}
