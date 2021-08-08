@@ -4,7 +4,7 @@ use action::HookAction;
 
 use crate::server::http::{HTTPCallback, HTTPServer};
 use crate::utils::error::MultihookResult;
-use hyper::{Body, Response};
+use hyper::{Body, Method, Response};
 
 pub mod action;
 pub mod command_template;
@@ -39,7 +39,8 @@ impl HookServer {
                     ))))
                 })
             }
-        });
+        })
+        .allow_method(Method::POST);
         self.server.add_callback(point, cb);
     }
 

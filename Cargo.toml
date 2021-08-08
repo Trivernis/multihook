@@ -4,7 +4,7 @@ description = "A webhook server"
 authors = ["trivernis <trivernis@protonmail.com>"]
 license = "GPL-3.0"
 readme = "README.md"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2018"
 repository = "https://github.com/Trivernis/multihook.git"
 

@@ -1,6 +1,6 @@
 use crate::utils::error::MultihookResult;
 use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Request, Response, Server};
+use hyper::{Body, Method, Request, Response, Server, StatusCode};
 use std::collections::HashMap;
 use std::convert::Infallible;
 use std::future::Future;
@@ -9,6 +9,7 @@ use std::pin::Pin;
 use std::sync::Arc;
 
 pub struct HTTPCallback<T1, T2> {
+    methods: Vec<Method>,
     inner: Arc<
         dyn Fn(
                 Request<T1>,
@@ -32,10 +33,27 @@ impl HTTPCallback<Body, Body> {
     {
         Self {
             inner: Arc::new(cb),
+            methods: Vec::new(),
         }
     }
 
+    pub fn allow_method(mut self, method: Method) -> Self {
+        self.methods.push(method);
+
+        self
+    }
+
+    pub fn validate_method(&self, method: &Method) -> bool {
+        self.methods.contains(method)
+    }
+
     pub async fn execute(&self, req: Request<Body>) -> MultihookResult<Response<Body>> {
+        if !self.validate_method(req.method()) {
+            return Ok(Response::builder()
+                .status(StatusCode::METHOD_NOT_ALLOWED)
+                .body(Body::from("Method not allowed"))
+                .unwrap());
+        }
         self.inner.as_ref()(req).await
     }
 }
@@ -51,7 +69,7 @@ impl HTTPServer {
     }
 
     async fn execute_callback(&self, req: Request<Body>) -> Result<Response<Body>, Infallible> {
-        let path = req.uri().path();
+        let path = &req.uri().path()[1..];
         let response = if let Some(cb) = self.routes.get(path) {
             match cb.as_ref().execute(req).await {
                 Ok(res) => res,
@@ -62,8 +80,8 @@ impl HTTPServer {
             }
         } else {
             Response::builder()
-                .status(404)
-                .body(Body::from("Unknown endpoint"))
+                .status(StatusCode::NOT_FOUND)
+                .body(Body::from("404 - Not Found"))
                 .unwrap()
         };
 
