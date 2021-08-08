@@ -5,6 +5,7 @@ use utils::settings::get_settings;
 
 use crate::server::HookServer;
 
+mod secret_validation;
 mod server;
 pub(crate) mod utils;
 

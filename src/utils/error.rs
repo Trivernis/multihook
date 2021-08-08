@@ -22,4 +22,7 @@ pub enum MultihookError {
 
     #[error(transparent)]
     Hyper(#[from] hyper::Error),
+
+    #[error("Secret validation failed.")]
+    InvalidSecret,
 }

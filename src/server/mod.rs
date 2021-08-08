@@ -1,10 +1,11 @@
 use std::sync::Arc;
 
+use hyper::{Body, Method, Response};
+
 use action::HookAction;
 
 use crate::server::http::{HTTPCallback, HTTPServer};
 use crate::utils::error::MultihookResult;
-use hyper::{Body, Method, Response};
 
 pub mod action;
 pub mod command_template;

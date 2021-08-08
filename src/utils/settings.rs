@@ -1,3 +1,4 @@
+use crate::secret_validation::SecretFormat;
 use crate::utils::error::MultihookResult;
 use config::File;
 use lazy_static::lazy_static;
@@ -25,6 +26,13 @@ pub struct EndpointSettings {
     pub allow_parallel: bool,
     #[serde(default)]
     pub run_detached: bool,
+    pub secret: Option<SecretSettings>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct SecretSettings {
+    pub value: String,
+    pub format: SecretFormat,
 }
 
 impl Default for Settings {
