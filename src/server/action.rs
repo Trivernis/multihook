@@ -1,6 +1,7 @@
 use crate::server::command_template::CommandTemplate;
 use crate::utils::error::MultihookResult;
 use crate::utils::settings::EndpointSettings;
+use hyper::{Body, Request};
 use serde_json::Value;
 use std::fs::read_to_string;
 use std::mem;
@@ -32,11 +33,12 @@ impl HookAction {
         }
     }
 
-    pub async fn execute(&self, body: &str) -> MultihookResult<()> {
+    pub async fn execute(&self, req: Request<Body>) -> MultihookResult<()> {
+        let body = hyper::body::to_bytes(req.into_body()).await?.to_vec();
+        let body = String::from_utf8(body)?;
         if self.run_detached {
             tokio::spawn({
                 let action = self.clone();
-                let body = body.to_owned();
                 async move {
                     if let Err(e) = action.execute_command(&body).await {
                         log::error!("Detached hook threw an error: {:?}", e);
@@ -46,7 +48,7 @@ impl HookAction {
 
             Ok(())
         } else {
-            self.execute_command(body).await
+            self.execute_command(&body).await
         }
     }
 

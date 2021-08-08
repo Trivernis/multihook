@@ -41,5 +41,8 @@ async fn init_and_start() {
         .address
         .clone()
         .unwrap_or(String::from("127.0.0.1:8080"));
-    server.start(&address).await
+    server
+        .start(&address)
+        .await
+        .expect("Failed to start server");
 }
