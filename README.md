@@ -48,7 +48,7 @@ path = "error"
 action = "echo '{{$.books.*.title}}'"
 # Validate secrets according to different parsing rules
 # Currently only GitHub secrets are supported
-secret = { value = "my secret", type = "GitHub"}
+secret = { value = "my secret", format = "GitHub"}
 
 [endpoints.testscript]
 path = "script"
