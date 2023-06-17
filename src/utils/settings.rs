@@ -10,6 +10,7 @@ use std::path::{Path, PathBuf};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Settings {
     pub server: ServerSettings,
+    pub hooks: Option<Hooks>,
     pub endpoints: HashMap<String, EndpointSettings>,
 }
 
@@ -18,10 +19,18 @@ pub struct ServerSettings {
     pub address: Option<String>,
 }
 
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
+pub struct Hooks {
+    pub pre_action: Option<String>,
+    pub post_action: Option<String>,
+    pub err_action: Option<String>,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct EndpointSettings {
     pub path: String,
     pub action: String,
+    pub hooks: Option<Hooks>,
     #[serde(default)]
     pub allow_parallel: bool,
     #[serde(default)]
@@ -40,6 +49,7 @@ impl Default for Settings {
         Self {
             endpoints: HashMap::new(),
             server: ServerSettings { address: None },
+            hooks: None,
         }
     }
 }

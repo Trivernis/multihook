@@ -25,4 +25,22 @@ pub enum MultihookError {
 
     #[error("Secret validation failed.")]
     InvalidSecret,
+
+    #[error(transparent)]
+    JsonError(#[from] serde_json::Error),
+
+    #[error("Action failed: {0}")]
+    ActionError(String),
+}
+
+pub trait LogErr {
+    fn log_err<S: AsRef<str>>(&self, template: S);
+}
+
+impl<T> LogErr for MultihookResult<T> {
+    fn log_err<S: AsRef<str>>(&self, message: S) {
+        if let Err(e) = self.as_ref() {
+            log::error!("{}: {}", message.as_ref(), e);
+        }
+    }
 }

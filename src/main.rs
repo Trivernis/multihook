@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use utils::logging::init_logger;
 use utils::settings::get_settings;
 
+use crate::server::endpoint::HookEndpoint;
 use crate::server::HookServer;
 
 mod secret_validation;
@@ -34,7 +35,10 @@ async fn init_and_start() {
 
     for (name, endpoint) in &settings.endpoints {
         log::info!("Adding endpoint '{}' with path '{}'", name, &endpoint.path);
-        server.add_hook(endpoint.path.clone(), endpoint.into())
+        server.add_hook(
+            endpoint.path.clone(),
+            HookEndpoint::from_config(name, &settings, &endpoint),
+        )
     }
 
     let address = settings

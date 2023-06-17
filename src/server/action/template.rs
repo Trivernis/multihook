@@ -4,12 +4,12 @@ use regex::{Match, Regex};
 use serde_json::Value;
 
 #[derive(Clone)]
-pub struct CommandTemplate {
+pub struct ActionTemplate {
     src: String,
     matches: Vec<(usize, usize)>,
 }
 
-impl CommandTemplate {
+impl ActionTemplate {
     pub fn new<S: ToString>(command: S) -> Self {
         lazy_static! {
             static ref PLACEHOLDER_REGEX: Regex = Regex::new(r"\{\{(.*?)\}\}").unwrap();

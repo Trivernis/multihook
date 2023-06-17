@@ -2,13 +2,13 @@ use std::sync::Arc;
 
 use hyper::{Body, Method, Response};
 
-use action::HookAction;
+use endpoint::HookEndpoint;
 
 use crate::server::http::{HTTPCallback, HTTPServer};
 use crate::utils::error::MultihookResult;
 
 pub mod action;
-pub mod command_template;
+pub mod endpoint;
 mod http;
 
 pub struct HookServer {
@@ -22,7 +22,7 @@ impl HookServer {
         }
     }
 
-    pub fn add_hook(&mut self, point: String, action: HookAction) {
+    pub fn add_hook(&mut self, point: String, action: HookEndpoint) {
         let action = Arc::new(action);
 
         let cb = HTTPCallback::new({
@@ -34,6 +34,7 @@ impl HookServer {
                     log::debug!("Executing hook {}", point);
                     action.execute(req).await?;
                     log::debug!("Hook {} executed", point);
+
                     Ok(Response::new(Body::from(format!(
                         "Hook '{}' executed.",
                         point
