@@ -34,6 +34,14 @@ After running the program for the first time the config directory and config fil
 [server]
 address = '127.0.0.1:8080'
 
+[hooks]
+# executed before all endpoint actions
+pre_action = "echo 'pre action'"
+# executed after all endpoint actions
+post_action = "echo 'post action'"
+# executed when an action fails
+err_action = "echo \"Hook $HOOK_NAME failed with error: $HOOK_ERROR\""
+
 # the name needs to be unique
 [endpoints.ls]
 # the path needs to be unique
@@ -42,6 +50,8 @@ path = "path/on/the/server"
 action = "ls {{$.filepath}}"
 # allows multiple instances of this action to run concurrently
 allow_parallel = true
+# additional hooks on endpoint-level
+hooks = {pre_action = "echo 'before something bad happens'"}
 
 [endpoints.error]
 path = "error"
