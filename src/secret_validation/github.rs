@@ -1,5 +1,5 @@
 use crate::secret_validation::SecretValidator;
-use hmac::{Hmac, Mac, NewMac};
+use hmac::{Hmac, Mac};
 use hyper::HeaderMap;
 use sha2::Sha256;
 
@@ -19,7 +19,7 @@ impl SecretValidator for GithubSecretValidator {
             } else {
                 return false;
             };
-            mac.verify(&decoded_secret).is_ok()
+            mac.verify_slice(&decoded_secret).is_ok()
         } else {
             log::debug!("Missing Signature Header");
             false

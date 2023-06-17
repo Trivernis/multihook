@@ -1,6 +1,6 @@
 use crate::secret_validation::SecretFormat;
 use crate::utils::error::MultihookResult;
-use config::File;
+use config::{Config, File};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -64,27 +64,24 @@ fn load_settings() -> MultihookResult<Settings> {
         )?;
     }
 
-    let mut settings = config::Config::default();
-    settings
-        .merge(
+    let settings = Config::builder()
+        .add_source(
             glob::glob(&format!("{}/*.toml", config_dir.to_string_lossy()))
                 .unwrap()
                 .map(|path| File::from(path.unwrap()))
                 .collect::<Vec<_>>(),
-        )?
-        .merge(config::Environment::with_prefix("MULTIHOOK"))?;
+        )
+        .add_source(config::Environment::with_prefix("MULTIHOOK"))
+        .add_source(File::from(PathBuf::from(".multihook.toml")))
+        .build()?;
 
-    let settings: Settings = settings.try_into()?;
+    let settings: Settings = settings.try_deserialize()?;
 
     Ok(settings)
 }
 
 fn write_toml_pretty<T: Serialize>(path: &PathBuf, value: &T) -> MultihookResult<()> {
-    let mut buf_str = String::new();
-    let mut serializer = toml::Serializer::pretty(&mut buf_str);
-    serializer.pretty_array(true);
-    value.serialize(&mut serializer)?;
-    fs::write(path, buf_str.as_bytes())?;
+    fs::write(path, toml::to_string_pretty(value)?)?;
 
     Ok(())
 }

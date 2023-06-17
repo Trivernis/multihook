@@ -11,33 +11,33 @@ repository = "https://github.com/Trivernis/multihook.git"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-thiserror = "1.0.26"
-config = "0.11.0"
+thiserror = "1.0.40"
+config = "0.13.3"
 lazy_static = "1.4.0"
-dirs = "3.0.2"
-toml = "0.5.8"
-glob = "0.3.0"
-log = "0.4.14"
+dirs = "5.0.1"
+toml = "0.7.4"
+glob = "0.3.1"
+log = "0.4.19"
 colored = "2.0.0"
-chrono = "0.4.19"
-fern = "0.6.0"
-serde_json = "1.0.66"
+chrono = "0.4.26"
+fern = "0.6.2"
+serde_json = "1.0.97"
 jsonpath = "0.1.1"
-regex = "1.5.4"
-hmac = "0.11.0"
-sha2 = "0.9.5"
+regex = "1.8.4"
+hmac = "0.12.1"
+sha2 = "0.10.7"
 hex = "0.4.3"
 
 [dependencies.serde]
-version = "1.0.127"
+version = "1.0.164"
 features = ["derive"]
 
 [dependencies.tokio]
-version = "1.9.0"
+version = "1.28.2"
 features = ["macros", "process", "sync"]
 
 [dependencies.hyper]
-version = "0.14.11"
+version = "0.14.26"
 features = ["server", "http1", "http2", "tcp"]
 
 [features]
