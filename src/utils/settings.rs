@@ -82,7 +82,7 @@ fn load_settings() -> MultihookResult<Settings> {
                 .collect::<Vec<_>>(),
         )
         .add_source(config::Environment::with_prefix("MULTIHOOK"))
-        .add_source(File::from(PathBuf::from(".multihook.toml")))
+        .add_source(File::from(PathBuf::from(".multihook.toml")).required(false))
         .build()?;
 
     let settings: Settings = settings.try_deserialize()?;
