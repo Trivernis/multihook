@@ -54,11 +54,11 @@ impl Action {
         let stdout = String::from_utf8_lossy(&output.stdout[..]);
         log::debug!("Command output is: {}", stdout);
 
-        if stderr.len() > 0 {
+        if output.status.success() {
+            Ok(())
+        } else {
             log::error!("Errors occurred during command execution: {}", stderr);
             Err(MultihookError::ActionError(stderr.into_owned()))
-        } else {
-            Ok(())
         }
     }
 }
