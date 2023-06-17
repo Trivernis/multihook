@@ -1,18 +1,18 @@
-mod github;
+mod hash_mac;
 
-use crate::secret_validation::github::GithubSecretValidator;
+use crate::secret_validation::hash_mac::HMacSecretValidator;
 use hyper::HeaderMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum SecretFormat {
-    GitHub,
+    HMac,
 }
 
 impl SecretFormat {
     pub fn validator(&self) -> impl SecretValidator {
         match self {
-            SecretFormat::GitHub => GithubSecretValidator,
+            SecretFormat::HMac => HMacSecretValidator,
         }
     }
 }

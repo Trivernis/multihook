@@ -57,8 +57,8 @@ hooks = {pre_action = "echo 'before something bad happens'"}
 path = "error"
 action = "echo '{{$.books.*.title}}'"
 # Validate secrets according to different parsing rules
-# Currently only GitHub secrets are supported
-secret = { value = "my secret", format = "GitHub"}
+# Currently only HMac based secrets with sha256 are supported
+secret = { value = "my secret", format = "HMac"}
 
 [endpoints.testscript]
 path = "script"
